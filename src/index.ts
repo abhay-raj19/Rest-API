@@ -57,32 +57,23 @@ app.post("/post", async (req, res) => {
   res.json(newPost);
 });
 
-// async function main() {
-//     const newUser = await prisma.user.create({
-//         data:{
-//             name:"jhon",
-//             email:"kirat@prisma.io",
-//             posts:{
-//                 create : {
-//                     title:"Hello world ",
-//                 },
-//             }
-//         }
-//     });
-//     console.log("created up a new user: ",newUser);
-//     const allUsers = await prisma.user.findMany({
-//         include:{
-//             posts:true
-//         },
-//     })
-//     console.log("All the users: ");
-//     console.dir(allUsers)
+app.put("/post/publish/:id",async (req,res) => {
+    const { id } = req.params;
+    const post = await prisma.post.update({
+        where:{id:Number(id)},
+        data:{published:true},
+    })
+    res.json(post);
+})
 
-// }
+app.delete("/post/:id",async (req, res) => {
+    const { id } = req.params;
+    const post = await prisma.post.delete({
+        where:{id:Number(id)},
+    })
+    res.json(post);
+})
 
-// main()
-// .catch((e) => console.error(e))
-// .finally(async () => await prisma.$disconnect())
 
 app.listen(3000, () =>
   console.log("REST API server ready at: http://localhost:3000")
